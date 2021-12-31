@@ -1,9 +1,8 @@
 #ifndef SINGLY_LINKED_LIST
 #define SINGLY_LINKED_LIST
 
-// template<class T>
-
 // 数据节点的数据结构
+template<class T>
 class SinglyLinkedNode
 {
 public:
@@ -11,23 +10,24 @@ public:
        next = 0;
    };
     // 创建新的node
-   SinglyLinkedNode(int data)
+   SinglyLinkedNode(T data)
    {
        this->data = data;
        next = 0;
    };
    ~SinglyLinkedNode(){};
-   int data;             // 链表的数据
+   T data;             // 链表的数据
    SinglyLinkedNode *next;  // 指向下一个节点
 };
 
 // 链表的数据结构
+template<class T>
 class SinglyList
 {
 private:
     /* data */
-    SinglyLinkedNode *head;   // 头节点
-    SinglyLinkedNode *tail;   // 尾节点
+    SinglyLinkedNode<T> *head;   // 头节点
+    SinglyLinkedNode<T> *tail;   // 尾节点
     int len;                  // 链表长度
 
 public:
@@ -47,17 +47,19 @@ public:
     {
         return len;
     };
+    // 情况链表
+    void clear();
     // 链表是否为空
     bool ismpty()
     {
         return head == 0;
     }
     // 插入到链表的头部
-    void inseartToHead(int data);  
+    void inseartToHead(T data);  
     // 插入到链表的尾部
-    void inseartTotail(int data); 
+    void inseartTotail(T data); 
     // 插入到链表的index
-    void inseartToindex(int index, int data); 
+    void inseartToindex(int index, T data); 
     // 删除链表的头部元素
     void deleteToHead();
     // 删除链表的尾部元素
@@ -67,8 +69,8 @@ public:
     // 查询链表的所有值
     void queryAll();
     // 返回index的值
-    int queryIndex(int index);
+    bool queryIndex(int index, T *info);
     // 判断value是否存在
-    bool queryValue(int data);
+    bool queryValue(T data);
 };
 #endif

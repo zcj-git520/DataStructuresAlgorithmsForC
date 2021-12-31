@@ -44,6 +44,8 @@ public:
     {
         return len;
     };
+    // 清空链表
+    void clear();
     // 链表是否为空
     bool isEmpty()
     {

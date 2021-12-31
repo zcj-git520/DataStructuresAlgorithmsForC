@@ -9,23 +9,19 @@ const int ReductOne = -1;
 
 using namespace std;
 
-SinglyList::~SinglyList()
+template<class T>
+SinglyList<T>::~SinglyList()
 {
-    while(!ismpty())
-    {
-        SinglyLinkedNode *node;
-        node = head->next;
-        delete head;
-        head = node;
-    }
+    clear();
 }
 
 // 插入到链表的尾部
-void SinglyList::inseartTotail(int data)
+template<class T>
+void SinglyList<T>::inseartTotail(T data)
 {
     // 定义node
-    SinglyLinkedNode *new_node;
-    new_node = new SinglyLinkedNode(data);
+    SinglyLinkedNode<T> *new_node;
+    new_node = new SinglyLinkedNode<T>(data);
     // 链表为空
     if (ismpty())
     {
@@ -39,10 +35,11 @@ void SinglyList::inseartTotail(int data)
 }
 
 // 插入到链表的头部
-void SinglyList::inseartToHead(int data)
+template<class T>
+void SinglyList<T>::inseartToHead(T data)
 {
-    SinglyLinkedNode *node;
-    node = new SinglyLinkedNode(data);
+    SinglyLinkedNode<T> *node;
+    node = new SinglyLinkedNode<T>(data);
     if (ismpty()){
         head = tail = node;
         setlen(addOne);
@@ -54,7 +51,8 @@ void SinglyList::inseartToHead(int data)
 }
 
 // 插入到链表的index
-void SinglyList::inseartToindex(int index, int data)
+template<class T>
+void SinglyList<T>::inseartToindex(int index, T data)
 {
     int len;
     len = getlen()-1;
@@ -68,15 +66,15 @@ void SinglyList::inseartToindex(int index, int data)
         inseartToHead(data);
         return;
     }
-    SinglyLinkedNode *node;
-    node = new SinglyLinkedNode(data);
+    SinglyLinkedNode<T> *node;
+    node = new SinglyLinkedNode<T>(data);
     int __index = 1;
     for (node = head; node != tail; node = node->next)
     {
         if (__index == index)
         {
-            SinglyLinkedNode *new_node;
-            new_node = new SinglyLinkedNode(data);
+            SinglyLinkedNode<T> *new_node;
+            new_node = new SinglyLinkedNode<T>(data);
             new_node ->next = node->next;
             node->next = new_node;
             setlen(addOne);
@@ -86,15 +84,28 @@ void SinglyList::inseartToindex(int index, int data)
     }
 }
 
+//  清空链表
+template<class T>
+void SinglyList<T> ::clear()
+{
+    while (!ismpty())
+    {
+        SinglyLinkedNode<T> *node = head->next;
+        delete head;
+        head = node;
+    }
+}
+
 // 删除链表的头部元素
-void SinglyList::deleteToHead()
+template<class T>
+void SinglyList<T>::deleteToHead()
 {
     // 链表为空
     if(ismpty())
     {
         return;
     }
-    SinglyLinkedNode *tmp = head;
+    SinglyLinkedNode<T> *tmp = head;
     // 链表只存在一个值
     if(head == tail)
     {
@@ -109,7 +120,8 @@ void SinglyList::deleteToHead()
 }
 
 // 删除链表的尾部元素
-void SinglyList::deleteToTail()
+template<class T>
+void SinglyList<T> ::deleteToTail()
 {
     // 链表为空
     if(ismpty())
@@ -124,7 +136,7 @@ void SinglyList::deleteToTail()
         head = tail = 0;
         return;
     }
-    SinglyLinkedNode *tmp = head;
+    SinglyLinkedNode<T> *tmp = head;
     while (tmp->next != tail)
     {
         tmp  = tmp->next;
@@ -136,7 +148,8 @@ void SinglyList::deleteToTail()
 }
 
 // 删除链表的index元素
-void SinglyList::deleteToIndex(int index)
+template<class T>
+void SinglyList<T> ::deleteToIndex(int index)
 {
     // 链表为空
     if(ismpty())
@@ -163,8 +176,8 @@ void SinglyList::deleteToIndex(int index)
         return;
     }
 
-    SinglyLinkedNode *node = head;
-    SinglyLinkedNode *tmp = head->next;
+    SinglyLinkedNode<T> *node = head;
+    SinglyLinkedNode<T> *tmp = head->next;
     int __index = 1;
     while (__index != index)
     {
@@ -178,7 +191,8 @@ void SinglyList::deleteToIndex(int index)
 }
 
 // 查询链表的所有值
-void SinglyList::queryAll()
+template<class T>
+void SinglyList<T> ::queryAll()
 {
     if (ismpty()){
         cout << "The list length is empty" << endl;
@@ -186,7 +200,7 @@ void SinglyList::queryAll()
     }
     int i = 1;
     cout << "The length of the list is zero:" << getlen() << endl;
-    SinglyLinkedNode *node;
+    SinglyLinkedNode<T> *node;
     for(node = head; node != tail->next; node = node->next){
         cout << "node num is:" << i << "  data:" << node->data << endl;
         i++;
@@ -194,37 +208,42 @@ void SinglyList::queryAll()
 }
 
 // 返回index的值
-int SinglyList::queryIndex(int index)
+template<class T>
+bool SinglyList<T> ::queryIndex(int index, T *info)
 {
     int len = getlen();
     // 链表为空, 索引不存在
     if(ismpty() || index > len -1 || index < 0)
     {
-        return -1;
+        return false;
     }
    if (index == 0)
    {
-       return head ->data;
+       *info = head ->data;
+       return true;
    }
    if (index == len -1)
    {
-       return tail ->data;
+       *info = tail ->data;
+       return true;
    }
    int __index = 1;
-   for (SinglyLinkedNode *node = head->next; node != tail; node = node->next)
+   for (SinglyLinkedNode<T> *node = head->next; node != tail; node = node->next)
    {
        if (index == __index)
        {
-           return node->data;
+           *info = node->data;
+           return true;
 
        }
         __index ++; 
    }
-   return -1;
+   return false;
 }
 
 //// 判断value是否存在
-bool SinglyList::queryValue(int value)
+template<class T>
+bool SinglyList<T> ::queryValue(T value)
 {
     // 链表为空
     if(ismpty())
@@ -240,7 +259,7 @@ bool SinglyList::queryValue(int value)
         return false;
     }
 
-    for(SinglyLinkedNode *node = head; node != tail->next; node = node->next)
+    for(SinglyLinkedNode<T> *node = head; node != tail->next; node = node->next)
     {
         if(node->data == value)
         {
@@ -253,7 +272,7 @@ bool SinglyList::queryValue(int value)
 // 测试
 int main()
 {
-    SinglyList newList;
+    SinglyList<int> newList;
     newList.inseartTotail(1);
     newList.inseartTotail(2);
     newList.inseartTotail(3);
@@ -269,6 +288,7 @@ int main()
     newList.queryAll();
     cout << "************************************************"<< endl;
     newList.deleteToTail();
+    // newList.clear();
     newList.queryAll();
     cout << "************************************************"<< endl;
     newList.deleteToTail();
@@ -277,9 +297,15 @@ int main()
     newList.deleteToIndex(3);
     newList.queryAll();
     cout << "************************************************"<< endl;
-    cout << newList.queryIndex(5) << endl;
-     cout << "************************************************"<< endl;
-    cout << newList.queryValue(21) << endl;
+    int info;
+    int index = 0;
+    if (newList.queryIndex(index, &info))
+    {
+        cout << "exits index: " << index << " => value is " << info<<  endl;
+    }
+    
+    cout << "************************************************"<< endl;
+    cout << newList.queryValue(2) << endl;
     system("pause");
     return 0;
 }

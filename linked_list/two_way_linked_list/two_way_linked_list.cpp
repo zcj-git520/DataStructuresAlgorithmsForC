@@ -13,12 +13,7 @@ template<class T>
 
 TwoWayList<T> ::~TwoWayList()
 {
-   while (!isEmpty())
-   {
-      TwoWayLinkedNode<T> *node = head->next;
-      delete head;
-      head = node;
-   }
+  clear();
 }
 
 template<class T>
@@ -84,6 +79,18 @@ void TwoWayList<T> ::inseartToindex(int index, T data)
    new_node->next = node->next;   // 新节点的后继要指向node的后继
    node->next = new_node;         // node的后继要指向新节点
    setlen(addOne);
+}
+
+template<class T>
+void TwoWayList<T> ::clear()
+{
+   while (!isEmpty())
+   {
+      TwoWayLinkedNode<T> *node = head->next;
+      delete head;
+      head = node;
+   }
+   
 }
 
 template<class T>
@@ -204,9 +211,10 @@ bool TwoWayList<T> ::queryIndex(int index, T *data)
    {
       if (__index == index)
       {
-         data = &node->data;
+         *data = node->data;
          return true;
       }
+      __index++;
 
    }
    return false;
@@ -253,6 +261,7 @@ int main()
    newList.deleteToHead();
    newList.deleteToHead();
    newList.queryAll();
+   // newList.clear();
    cout << "****************************************************"<< endl;
    newList.deleteToTail();
    newList.deleteToTail();
@@ -263,10 +272,16 @@ int main()
    newList.deleteToIndex(4);
    newList.queryAll();
    cout << "****************************************************"<< endl;
-   int d = 100;
-   // *d = 100;
-   newList.queryIndex(0, &d);
-   cout <<"d:"<< d << endl;
+   int index = 1;
+   int info;
+   if(newList.queryIndex(index, &info))
+   {
+      cout << "exits index: " << index << " => value is " << info<<  endl;
+   }
+   else
+   {
+      cout <<" no exits index:" << index << endl;
+   }
    cout << "****************************************************"<< endl;
    newList.queryAll();
    cout << newList.queryValue(1)<< endl;
