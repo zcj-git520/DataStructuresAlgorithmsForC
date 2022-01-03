@@ -7,11 +7,19 @@ template<class T>
 
 CircularDoubleList<T> ::~CircularDoubleList()
 {
+    clear();  // 清空链表
+}
+
+template<class T>
+void CircularDoubleList<T> ::clear()
+{
+    // 判断链表是否为空， 为空直接返回
     if(isEmpty())
     {
         return;
 
     }
+    // 循环的删除节点， 直至到当前节点
     CircularDoubleLinkedNode<T> *node = current_node ->next;
     while (node != current_node)
     {
@@ -19,6 +27,7 @@ CircularDoubleList<T> ::~CircularDoubleList()
         current_node = node;
         CircularDoubleLinkedNode<T> *node = current_node ->next;
     }
+    // 删除当前节点
     delete current_node;
 
 }

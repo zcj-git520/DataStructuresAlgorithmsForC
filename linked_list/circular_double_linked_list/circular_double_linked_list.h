@@ -50,6 +50,8 @@ public:
     {
         return current_node == 0;
     }
+    // 清空链表
+    void clear();
     void inseartNode(T data);
     bool deleteNode();
     void queryAll();
