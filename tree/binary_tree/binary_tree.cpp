@@ -21,21 +21,21 @@ BinarySearchTree<T> ::~BinarySearchTree()
 
 // 采用递归的方式删除节点
 template<class T>
-void BinarySearchTree<T> ::deleteNode(BinarySearchTreeNode<T> *node)
+void BinarySearchTree<T> ::deleteNodeAll(BinarySearchTreeNode<T> *node)
 {
     // 如果的空树就结束递归
     if(!node)
     {
         return;
     }
-    deleteNode(node->left);
-    deleteNode(node->right);
+    deleteNodeAll(node->left);
+    deleteNodeAll(node->right);
     delete node;   // 释放资源
 }
 template<class T>
 void BinarySearchTree<T> ::clear()
 {
-    deleteNode(root);   // 清空所有节点
+    deleteNodeAll(root);   // 清空所有节点
     treeNodeNum = 0;    // 树的节点数为0
 }
 
@@ -89,19 +89,135 @@ void BinarySearchTree<T> ::inseartNode(const T data)
 
 }
 template<class T>
-void BinarySearchTree<T> ::showNode(BinarySearchTreeNode<T> *node)
+void BinarySearchTree<T> ::DLR(BinarySearchTreeNode<T> *node)
 {
-    if(node == 0)
+    if(!node)
     {
         return;
     }
-    cout << node->data << endl;
-    showNode(node->left);
-    showNode(node->right);
-
+    // 前序遍历(DLR)(根->左->右)
+    cout << node->data << "->";
+    DLR(node->left);
+    DLR(node->right);
 }
 template<class T>
-void BinarySearchTree<T> ::breadthFirstTraversal()
+void BinarySearchTree<T> ::LDR(BinarySearchTreeNode<T> *node)
+{
+    if(!node)
+    {
+        return;
+    }
+     // 中序遍历(LDR)(左->根->右)
+    LDR(node->left);
+    cout << node->data << "->";
+    LDR(node->right);
+}
+template<class T>
+void BinarySearchTree<T> ::LRD(BinarySearchTreeNode<T> *node)
+{
+    if(!node)
+    {
+        return;
+    }
+     // 后序遍历(LRD)(左->右->根)
+    LRD(node->left);
+    LRD(node->right);
+    cout << node->data << "->";
+
+}
+
+template<class T>
+void BinarySearchTree<T> ::deleteNodeByMerge(BinarySearchTreeNode<T> *node)
+{
+    BinarySearchTreeNode<T> *temp = node;
+    if(node != 0)
+    {
+        // 如果节点的左节点为空
+        if(!node->left)
+        {
+            node = node->right;  //直接指向node的右节点
+        }
+        // 如果右子节点为空
+        else if(!node->right)
+        {
+            node = node->left;  // 直接指向node的左节点
+        }
+        else{
+            temp = node->left; // temp 为node的左节点
+            // 找出左节点中的最大值
+            while (temp->right)
+            {
+                temp = temp->right;
+            }
+            temp->right = node->right; // 左子树的最大值指向右节点
+            temp = node;           
+            node = node->left;         // 左子树作为两颗树的头节点
+            
+        }
+        delete temp;
+
+    }
+    
+}
+
+template<class T>
+bool BinarySearchTree<T> ::removeNode(const T data)
+{
+    if(isEmpty())
+    {
+        cout << "the tree is empty" << endl;
+        return false;
+    }
+    BinarySearchTreeNode<T> *prev_node = 0;  // 头节点
+    BinarySearchTreeNode<T> *node = root;
+    // 找到值的节点
+    while (node != 0)
+    {
+        // 如果node的值等于data
+        if(node->data == data)
+        {
+            break;
+        }
+        prev_node = node;  // node的头节点
+        // node 的值大于deta 就往左子树找
+        if(node->data > data)
+        {
+            node = node->left;
+        }
+        // node 的值小于 data 就往右子树找
+        else{
+            node = node->right;
+        }
+    }
+    // 找到值的节点了
+    if(node != 0 && node->data == data)
+    {
+        // 如果是头节点
+        if(node == root)
+        {
+            deleteNodeByMerge(root);
+        }
+        // 其他节点的左节点==data
+        else if(prev_node->left == node)
+        {
+            deleteNodeByMerge(prev_node->left);
+        }
+        else
+        {
+            deleteNodeByMerge(prev_node->right);
+        }
+        treeNodeNum--; //节点数减一
+        return true;
+    }
+    else
+    {
+        cout << data << "no exits tree" << endl;
+    }
+    return false;
+}
+
+template<class T>
+void BinarySearchTree<T> ::showNodeByDLR()
 {
     if(isEmpty())
     {
@@ -110,17 +226,68 @@ void BinarySearchTree<T> ::breadthFirstTraversal()
     }
     // 遍历树
     BinarySearchTreeNode<T> *node = root;
-    showNode(node);  
+    cout << "DLR: ";
+    DLR(node);  
+    cout << endl;
 }
+
+template<class T>
+void BinarySearchTree<T> ::showNodeByLDR()
+{
+    if(isEmpty())
+    {
+        cout << "this tree is empty" << endl;
+        return;
+    }
+    // 遍历树
+    BinarySearchTreeNode<T> *node = root;
+    cout << "LDR: ";
+    LDR(node); 
+    cout << endl; 
+}
+
+template<class T>
+void BinarySearchTree<T> ::showNodeByLRD()
+{
+    if(isEmpty())
+    {
+        cout << "this tree is empty" << endl;
+        return;
+    }
+    // 遍历树
+    BinarySearchTreeNode<T> *node = root;
+    cout << "LRD: ";
+    LRD(node); 
+    cout << endl; 
+}
+
 
 int main(int argc, char const *argv[])
 {
     BinarySearchTree<int> tree;
-    tree.inseartNode(0);
-    tree.inseartNode(1);
-    tree.inseartNode(0);
-    tree.inseartNode(1);
-    tree.breadthFirstTraversal();
+    tree.inseartNode(5);
+    tree.inseartNode(3);
+    tree.inseartNode(2);
+    tree.inseartNode(4);
+    tree.inseartNode(6);
+    tree.inseartNode(5);
+    tree.inseartNode(7);
+    // 前序遍历
+    tree.showNodeByDLR();
+    // 中序遍历
+    tree.showNodeByLDR();
+    // 后序遍历
+    tree.showNodeByLRD();
+    cout << "*******************************" << endl;
+    cout << tree.removeNode(6) << endl;
+    // 前序遍历
+    tree.showNodeByDLR();
+    // 中序遍历
+    tree.showNodeByLDR();
+    // 后序遍历
+    tree.showNodeByLRD();
+
+    cout << "nodes is:" << tree.Nodes() << endl;
     system("pause");
     return 0;
 }
