@@ -47,8 +47,9 @@ private:
     void DLR(BinarySearchTreeNode<T> *node);
     void LDR(BinarySearchTreeNode<T> *node);
     void LRD(BinarySearchTreeNode<T> *node);
-    // 删除
-    void deleteNodeByMerge(BinarySearchTreeNode<T> *node); // 合并删除
+    // 删除*&代表指针引用
+    void deleteNodeByMerge(BinarySearchTreeNode<T>*& node); // 合并删除
+    void deleteNodeByCopy(BinarySearchTreeNode<T>*& node);  // 复制删除
 public:
     BinarySearchTree()
     {
@@ -78,9 +79,12 @@ public:
     // 后序遍历(LRD 左->右->根)
     void showNodeByLRD();
     // 删除节点的数据
-    bool removeNode(const T data);
-    // LVR查找树
-    bool LVRSearchData(const T data);
+    // 合并删除
+    bool removeNodeMerge(const T data);
+    // 复制删除
+    bool removeNodeCopy(const T data);
+    // 查找数据
+    bool SearchData(const T data);
 };
 
 
