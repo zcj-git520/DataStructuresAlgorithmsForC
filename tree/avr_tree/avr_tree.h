@@ -20,10 +20,10 @@ public:
     AvrTreeNode(){};
     AvrTreeNode(T data)
     {
-        this.data = data;
+        this->data = data;
         left = 0;
         right = 0;
-        hight = 0;
+        hight = -1;
     }
     ~AvrTreeNode(){};
     T data;                 // 存储的数据
@@ -38,29 +38,46 @@ class AvrTree
 {
 private:
     AvrTreeNode<T> *root;     // 定义根节点
+    // 插入节点
+    void inseartNode(AvrTreeNode<T>*& node, const T data);
     void deleteNodeAll(AvrTreeNode<T> *node); // 删除所有节点
     // 显示节点
     void DLR(AvrTreeNode<T> *node);
     void LDR(AvrTreeNode<T> *node);
     void LRD(AvrTreeNode<T> *node);
     // 删除*&代表指针引用
-    void deleteNodeByMerge(AvrTreeNode<T>*& node); // 合并删除
-    void deleteNodeByCopy(AvrTreeNode<T>*& node);  // 复制删除
-    // 单左旋
-    void LL(AvrTreeNode<T> *&node);
+    bool deleteNode(AvrTreeNode<T>*& node, const T data);
+    // void deleteNodeByMerge(AvrTreeNode<T>*& node); // 合并删除
+    // void deleteNodeByCopy(AvrTreeNode<T>*& node);  // 复制删除
     // 单右旋
+    void LL(AvrTreeNode<T> *&node);
+    // 单左旋
     void RR(AvrTreeNode<T> *&node);
     // 左右旋
-    void LRR(AvrTreeNode<T> *&node);
-    // 右左旋
     void RLR(AvrTreeNode<T> *&node);
+    // 右左旋
+    void LRR(AvrTreeNode<T> *&node);
+    // 求高度的最大值
+    int maxHight(int h1, int h2)
+    {
+        return h1>h2 ? h1:h2;
+    }
+      // 得到树的高度
+    int getTreeHight(AvrTreeNode<T> *node)
+    {
+        if(!node)
+        {
+            return -1;
+        }
+        return node->hight;
+    }
 public:
     AvrTree(/* args */)
     {
         root = 0;
     }
     ~AvrTree();
-      // 清空树
+    // 清空树
     void clear();
     // 是否为空树
     bool isEmpty()
@@ -68,7 +85,7 @@ public:
         return root == 0;
     }
     // 插入数据
-    void inseartNode(const T data);
+    void inseartData(const T data);
     // 深度优先遍历树
     // 前序遍历(DLR 根->左->右)
     void showNodeByDLR();
@@ -77,7 +94,7 @@ public:
     // 后序遍历(LRD 左->右->根)
     void showNodeByLRD();
     // 删除节点的数据
-    bool removeNode(const T data);
+    bool remove(const T data);
     // LVR查找树
     bool LVRSearchData(const T data);
 };
