@@ -83,8 +83,28 @@ bool AvrTree<T> ::deleteNode(AvrTreeNode<T> *& node, const T data)
             temp->right = node->right;
             temp = node;
             node = node->left;
+             // 是否对树进行调整
+            if(getTreeHight(node->left)-getTreeHight(node->right) > 1)
+            {
+                // 值比最大值大或者等于，就采用单左旋
+                if(data >= node->right->data)
+                {
+                    RR(node);
+                }
+                //采用先右旋在左旋
+                else
+                {
+                    LRR(node);
+                }
+
+            }
         }
+        // 删除节点，返回
         delete temp;
+        if(node)
+        {
+            node->hight = maxHight(getTreeHight(node->right), getTreeHight(node->right)) + 1;
+        }
         return true;
     }
     // 在左子树查找
@@ -109,7 +129,7 @@ bool AvrTree<T> ::deleteNode(AvrTreeNode<T> *& node, const T data)
     // 在右子树查找
     else
     {
-        deleteNode(node, data);
+        deleteNode(node->right, data);
         // 是否要对树进行调整
         if(getTreeHight(node->right) - getTreeHight(node->left) > 1)
         {
@@ -229,11 +249,28 @@ void AvrTree<T> ::showNodeByLRD()
 template<class T>
 bool AvrTree<T> ::LVRSearchData(const T data)
 {
-    int h1,h2;
-    h1 = 6;
-    h2 = 10;
-    cout << maxHight(h1, h2);
-    return false;
+   // 如果树为空就直接返回
+   if(isEmpty())
+   {
+       return false;
+   }
+   AvrTreeNode<T> *node = root;
+   while (node)
+   {
+       if(data == node->data)
+       {
+           return true;
+       }
+       else if(data < node->data)
+       {
+           node = node->left;
+       }
+       else
+       {
+           node = node->right;
+       }
+   }
+   return false;
 }
 
 // 节点的旋转
@@ -369,14 +406,32 @@ int main(int argc, char const *argv[])
     cout << "***********************************" << endl;
     avr.showNodeByLRD();
     cout << "***********************************" << endl;
-    bool is = avr.remove(42);
-    cout << "remove is:" << is << endl;
-     avr.showNodeByDLR();
+    bool ok = avr.remove(42);
+    cout << "remove is:" << ok << endl;
+    avr.showNodeByDLR();
     cout << "***********************************" << endl;
     avr.showNodeByLDR();
     cout << "***********************************" << endl;
     avr.showNodeByLRD();
     cout << "***********************************" << endl;
+    bool is = avr.remove(12);
+    cout << "remove is:" << is << endl;
+    avr.showNodeByDLR();
+    cout << "***********************************" << endl;
+    avr.showNodeByLDR();
+    cout << "***********************************" << endl;
+    avr.showNodeByLRD();
+    cout << "***********************************" << endl;
+    bool is1 = avr.remove(661);
+    cout << "remove1 is:" << is1 << endl;
+    avr.showNodeByDLR();
+    cout << "***********************************" << endl;
+    avr.showNodeByLDR();
+    cout << "***********************************" << endl;
+    avr.showNodeByLRD();
+    cout << "***********************************" << endl;
+    bool ok_ = avr.LVRSearchData(66);
+    cout << "SearchData is:" << ok_ << endl;
     system("pause");
     return 0;
 }
