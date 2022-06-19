@@ -29,12 +29,14 @@ public:
         this->data = data;
         left = 0;
         right = 0;
+        parent = 0;
         color = Red;   // 初始化颜色为红色   
     }
     ~RBTreeNode(){};
     T data;    // 定义数据
     RBTreeNode *left;   // 定义左节点
     RBTreeNode *right;  // 定义右节点
+    RBTreeNode *parent; // 父节点
     RBColor color;      // 节点的颜色
 };
 
