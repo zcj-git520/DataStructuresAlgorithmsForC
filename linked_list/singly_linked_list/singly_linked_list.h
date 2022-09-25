@@ -68,6 +68,9 @@ public:
     void deleteToIndex(int index);
     // 查询链表的所有值
     void queryAll();
+    // 查询链表的所有值通过递归
+    void query(SinglyLinkedNode<T> *node);
+    void queryAll1();
     // 返回index的值
     bool queryIndex(int index, T *info);
     // 判断value是否存在

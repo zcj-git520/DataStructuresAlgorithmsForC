@@ -7,6 +7,8 @@
 const int addOne = 1;
 const int ReductOne = -1;
 
+int glableNum = 1;
+
 using namespace std;
 
 template<class T>
@@ -207,6 +209,32 @@ void SinglyList<T> ::queryAll()
     }
 }
 
+template<class T>
+void SinglyList<T> ::query(SinglyLinkedNode<T> *node)
+{
+    if(node == tail->next)
+    {
+        return;
+    }
+    cout << "node num is:" << glableNum << "  data:" << node->data << endl;
+    glableNum ++;
+    query(node->next);
+}
+
+// 查询链表的所有值通过递归
+template<class T>
+void SinglyList<T> ::queryAll1()
+{
+     if (ismpty()){
+        cout << "The list length is empty" << endl;
+        return;
+    }
+    int i = 1;
+    cout << "The length of the list is zero:" << getlen() << endl;
+    SinglyLinkedNode<T> *node = head;
+    query(node);
+}
+
 // 返回index的值
 template<class T>
 bool SinglyList<T> ::queryIndex(int index, T *info)
@@ -282,7 +310,10 @@ int main()
     newList.inseartToHead(-13);
     newList.inseartToindex(6,5);
     newList.inseartToindex(-7,51);
+    cout << "*********************queryAll***************************"<< endl;
     newList.queryAll();
+    cout << "*********************queryAll1***************************"<< endl;
+    newList.queryAll1();
     cout << "************************************************"<< endl;
     newList.deleteToHead();
     newList.queryAll();
